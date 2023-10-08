@@ -22,6 +22,7 @@ public class Criterion{
     private boolean listValue      = false;
     private boolean noValue        = false;
     private boolean criterionValue = false;
+    private boolean functionValue  = false;
     private boolean limitValue     = false;
     private boolean orderByValue   = false;
     private boolean groupByValue   = false;
@@ -174,6 +175,13 @@ public class Criterion{
         return this;
     }
 
+    public Criterion count(){
+        this.operator      = Operator.COUNT;
+        this.functionValue = true;
+
+        return this;
+    }
+
     public Criterion and(Criterion... value){
         this.value          = Arrays.stream(value).collect(Collectors.toList());
         this.operator       = Operator.AND;
@@ -231,16 +239,14 @@ public class Criterion{
         return this;
     }
 
-    public Criterion asc(Object value){
-        this.value        = value;
+    public Criterion asc(){
         this.operator     = Operator.ASC;
         this.orderByValue = true;
 
         return this;
     }
 
-    public Criterion desc(Object value){
-        this.value        = value;
+    public Criterion desc(){
         this.operator     = Operator.DESC;
         this.orderByValue = true;
 
