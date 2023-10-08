@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper>
+    <sql id="SELECT_SQL">
+        SELECT
+        <choose>
+            <when test="query.selections != null and !query.selections.isEmpty">
+                <foreach collection="query.selections" item="criterion" separator=",">
+                    <choose>
+                        <when test="criterion.functionValue">
+                            ${criterion}(${criterion.field})
+                        </when>
+                        <otherwise>
+                            ${criterion.field}
+                        </otherwise>
+                    </choose>
+                </foreach>
+            </when>
+            <otherwise>
+                *
+            </otherwise>
+        </choose>
+    </sql>
+
+    <sql id="FROM_SQL">
+        FROM ${query.table}
+    </sql>
+
+    <sql id="WHERE_SQL">
+        <if test="query != null and query.conditions != null and !query.conditions.isEmpty">
+            <where>
+                <foreach collection="query.conditions" item="criterion">
+                    <trim prefix="AND (" suffix=")">
+                        <choose>
+                            <when test="criterion.singleValue">
+                                ${criterion.field} ${criterion.operator} #{criterion.value}
+                            </when>
+                            <when test="criterion.twinValue">
+                                ${criterion.field} ${criterion.operator} #{criterion.value} AND ${criterion.secondValue}
+                            </when>
+                            <when test="criterion.listValue">
+                                ${criterion.field} ${criterion.operator}
+                                <foreach collection="criterion.value" item="value" open="(" close=")" separator=",">
+                                    #{value}
+                                </foreach>
+                            </when>
+                            <when test="criterion.noValue">
+                                ${criterion.field} ${criterion.operator}
+                            </when>
+                            <when test="criterion.criterionValue">
+                                <foreach collection="criterion.value" item="item" open="(" close=")" separator="criterion.operator">
+                                    <trim prefix="(" suffix=")">
+                                        <choose>
+                                            <when test="item.singleValue">
+                                                ${item.field} ${item.operator} #{item.value}
+                                            </when>
+                                            <when test="item.twinValue">
+                                                ${item.field} ${item.operator} #{item.value} AND ${item.secondValue}
+                                            </when>
+                                            <when test="item.listValue">
+                                                ${item.field} ${item.operator}
+                                                <foreach collection="item.value" item="value" open="(" close=")" separator=",">
+                                                    #{value}
+                                                </foreach>
+                                            </when>
+                                            <when test="item.noValue">
+                                                ${item.field} ${item.operator}
+                                            </when>
+                                        </choose>
+                                    </trim>
+                                </foreach>
+                            </when>
+                        </choose>
+                    </trim>
+                </foreach>
+            </where>
+        </if>
+    </sql>
+
+    <sql id="GROUP_BY_SQL">
+        <if test="query.groupBy != null and !query.groupBy.isEmpty">
+            GROUP BY
+            <foreach collection="query.groupBy" item="group" separator=",">
+                #{group.field}
+            </foreach>
+        </if>
+    </sql>
+
+    <sql id="SORT_SQL">
+        <if test="query.sort != null and !query.sort.isEmpty">
+            ORDER BY
+            <foreach collection="query.sort" item="sort" separator=",">
+                #{sort.field} ${sort.operator}
+            </foreach>
+        </if>
+    </sql>
+</mapper>

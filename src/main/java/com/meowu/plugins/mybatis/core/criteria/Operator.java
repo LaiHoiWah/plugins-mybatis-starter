@@ -1,4 +1,4 @@
-package com.meowu.plugins.mybatis.core.mysql.entity;
+package com.meowu.plugins.mybatis.core.criteria;
 
 public interface Operator{
 

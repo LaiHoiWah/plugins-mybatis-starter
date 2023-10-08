@@ -1,4 +1,4 @@
-package com.meowu.plugins.mybatis.core.mysql.entity;
+package com.meowu.plugins.mybatis.core.criteria;
 
 import com.google.common.base.Joiner;
 import lombok.Getter;

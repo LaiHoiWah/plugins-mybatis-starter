@@ -5,7 +5,7 @@
                              http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <name>plugins-mybatis-starter</name>
+    <name>mybstais-starter</name>
     <groupId>com.meowu.plugins</groupId>
     <artifactId>mybstais-starter</artifactId>
     <version>0.0.1</version>
@@ -18,7 +18,9 @@
     </parent>
 
     <properties>
-
+        <project.name>mybstais-starter</project.name>
+        <project.jdk.version>11</project.jdk.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
@@ -27,7 +29,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
             <scope>provided</scope>
-            <version>2.7.14</version>
         </dependency>
 
         <!-- apache -->
@@ -35,7 +36,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
             <scope>provided</scope>
-            <version>4.4</version>
         </dependency>
 
         <!-- google -->
@@ -43,7 +43,13 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <scope>provided</scope>
-            <version>32.1.2-jre</version>
+        </dependency>
+
+        <!-- meowu -->
+        <dependency>
+            <groupId>com.meowu.commons</groupId>
+            <artifactId>common</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <!-- lombok -->
@@ -51,7 +57,6 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
-            <version>1.16.18</version>
         </dependency>
 
         <!-- test -->
@@ -59,7 +64,64 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
-            <version>4.11</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <finalName>${project.name}</finalName>
+
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+        </resources>
+
+        <testResources>
+            <testResource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </testResource>
+        </testResources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${project.jdk.version}</source>
+                    <target>${project.jdk.version}</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <useDefaultDelimiters>true</useDefaultDelimiters>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${apache.maven-jar.version}</version>
+                <configuration>
+                    <archive>
+                        <addMavenDescriptor>true</addMavenDescriptor>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
